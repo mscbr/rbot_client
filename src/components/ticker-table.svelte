@@ -1,27 +1,5 @@
 <script>
-  let socket = new WebSocket('ws://localhost:8080/');
-  let isSocketReady = false;
-  let arbs = [];
-
-  $: isSocketReady &&
-    socket.send(
-      JSON.stringify({
-        request: 'SUB',
-        channel: 'tickerArbs',
-      })
-    );
-
-  socket.addEventListener('open', function (event) {
-    console.log('WS: connection open');
-    isSocketReady = true;
-  });
-
-  socket.addEventListener('message', function (event) {
-    let response = null;
-    if (!!event.data) response = JSON.parse(event.data);
-
-    if (response && response.channel == 'tickerArbs') arbs = response.message;
-  });
+  import { tickerStore } from '../stores/websocket';
 
   const profitToProcent = (profitFloat) => {
     const arr = profitFloat.toFixed(3).toString().split('.')[1].split('');
@@ -35,8 +13,8 @@
     <th>PAIR</th>
     <th>EXCHANGES</th>
   </tr>
-  {#if arbs.length}
-    {#each arbs as arb (arb.market)}
+  {#if $tickerStore.arbs && $tickerStore.arbs.length}
+    {#each $tickerStore.arbs as arb (arb.market)}
       <tr>
         <td>{profitToProcent(arb.profit)}</td>
         <td>{arb.market}</td>

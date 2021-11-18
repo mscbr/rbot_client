@@ -27,7 +27,7 @@
     display: grid;
     grid-gap: 8px;
     margin-bottom: 8px;
-    grid-template-columns: 6fr 2fr;
+    grid-template-columns: 5fr 3fr;
     grid-template-rows: auto;
   }
   .column {
