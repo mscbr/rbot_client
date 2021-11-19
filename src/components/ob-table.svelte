@@ -1,34 +1,24 @@
 <script>
-  import { tickerStore, addTargetToOb } from '../stores/websocket';
+  import { obStore } from '../stores/websocket';
   import { profitToProcent } from '../utils/converters';
 </script>
 
 <table>
   <tr>
-    <th>PROFIT</th>
+    <th>RL-PROFIT</th>
     <th>PAIR</th>
     <th>EXCHANGES</th>
   </tr>
-  {#if $tickerStore.arbs && $tickerStore.arbs.length}
-    {#each $tickerStore.arbs as arb (arb.market)}
+  {#if $obStore.targets && $obStore.targets.length}
+    {#each $obStore.targets as target (target.market)}
       <tr>
-        <td>{profitToProcent(arb.profit)}</td>
+        <td>{profitToProcent(0)}</td>
         <td>
           <div class="market-wrapper">
-            <div class="market">{arb.market}</div>
-            <button
-              class="ob-button"
-              on:click={() =>
-                addTargetToOb({
-                  market: arb.market,
-                  exchanges: [arb.lowestAsk.exchange, arb.highestBid.exchange],
-                })}
-            >
-              OB->
-            </button>
+            <div class="market">{target.market}</div>
           </div>
         </td>
-        <td>{arb.lowestAsk.exchange} ⟹ {arb.highestBid.exchange}</td>
+        <td>{target.exchanges[0]} ⟹ {target.exchanges[1]}</td>
       </tr>
     {/each}
   {/if}

@@ -7,19 +7,32 @@
 
   import WinButton from '../ui/elements/win-button.svelte';
 
-  $: isSubscribingTickers = $wsStore.subscriptions.find(item => item === 'tickerArbs');
+  $: isSubscribingTickers = $wsStore.subscriptions.find(
+    (item) => item === 'tickerArbs'
+  );
 </script>
 
 <div class="container">
   <div class="btn-wrapper">
-    <WinButton onClick={() => isSubscribingTickers ? unsubscribeFromChannel('tickerArbs') : subscribeToChannel('tickerArbs') } disabled={!$wsStore.wsOpen}><span>{isSubscribingTickers ? 'Unsubsubscribe Tickers' : 'Subscribe Tickers'}</span></WinButton>
+    <WinButton
+      onClick={() =>
+        isSubscribingTickers
+          ? unsubscribeFromChannel('tickerArbs')
+          : subscribeToChannel('tickerArbs')}
+      disabled={!$wsStore.wsOpen}
+      ><span
+        >{isSubscribingTickers
+          ? 'Unsubsubscribe Tickers'
+          : 'Subscribe Tickers'}</span
+      ></WinButton
+    >
   </div>
 </div>
 
 <style>
   .container {
     width: 100%;
-    height: 100%;
+    min-height: 250px;
     border: 1px solid cornsilk;
     border-radius: 5px;
   }
