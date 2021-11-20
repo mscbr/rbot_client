@@ -1081,7 +1081,7 @@ const tickerStoreMock = [
   }
 ];
 
-export const tickerStore = writable({ arbs: [] });
+export const tickerStore = writable({ arbs: [], interval: 3 });
 export const obStore = writable({ targets: [] });
 const wsInitState = { wsOpen: false, subscriptions: [] };
 export const wsStore = writable(wsInitState);
@@ -1152,15 +1152,17 @@ export const closeConnection = () => {
   socket = null;
 };
 
-export const subscribeToChannel = (channel) => {
+export const subscribeToChannel = (channel, params) => {
   const { subscriptions } = get(wsStore);
   if (socket && socket.readyState > 0 && !subscriptions.includes(channel)) {
     socket.send(
       JSON.stringify({
         request: 'SUB',
         channel,
+        payload: { params }
       })
     );
+    if (channel === 'tickerArbs') tickerStore.update((prevData) => ({ ...prevData, }));
     wsStore.update((prevData) => ({ ...prevData, subscriptions: [...subscriptions, channel] }));
   }
 };
