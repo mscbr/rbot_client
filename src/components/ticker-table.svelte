@@ -1,5 +1,5 @@
 <script>
-  import { tickerStore, addTargetToOb } from '../stores/websocket';
+  import { tickerStore, addTargetToOb, wsStore } from '../stores/websocket';
   import { profitToProcent } from '../utils/converters';
 </script>
 
@@ -23,6 +23,7 @@
                   market: arb.market,
                   exchanges: [arb.lowestAsk.exchange, arb.highestBid.exchange],
                 })}
+              disabled={!$wsStore.wsOpen}
             >
               OB->
             </button>
