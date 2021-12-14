@@ -1,5 +1,5 @@
 <script>
-  import { tickerStore, addTargetToOb, wsStore } from '../stores/websocket';
+  import { tickerStore, addPathToOb, wsStore } from '../stores/websocket';
   import { profitToProcent } from '../utils/converters';
 </script>
 
@@ -19,7 +19,7 @@
             <button
               class="ob-button"
               on:click={() =>
-                addTargetToOb({
+                addPathToOb({
                   market: arb.market,
                   exchanges: [arb.lowestAsk.exchange, arb.highestBid.exchange],
                 })}

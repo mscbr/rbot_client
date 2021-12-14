@@ -1,5 +1,5 @@
 <script>
-  import { obStore } from '../stores/websocket';
+  import { obStore, removeObPath } from '../stores/websocket';
   import { profitToProcent } from '../utils/converters';
 </script>
 
@@ -9,16 +9,37 @@
     <th>PAIR</th>
     <th>EXCHANGES</th>
   </tr>
-  {#if $obStore.targets && $obStore.targets.length}
-    {#each $obStore.targets as target (target.market)}
+  {#if $obStore.paths && $obStore.paths.length}
+    {#each $obStore.paths as path (Math.random().toString())}
       <tr>
-        <td>{profitToProcent(0)}</td>
         <td>
-          <div class="market-wrapper">
-            <div class="market">{target.market}</div>
+          <div class="ob-level-profit">
+            {#if !!path.arbs}
+              {#each Object.values(path.arbs) as level}
+                <div class="ob-level">
+                  {level.preVal.split('.')[0]}:
+                  <span class={level.arb > 1 ? 'green' : 'red'}
+                    >{profitToProcent(level.arb)}</span
+                  >
+                </div>
+              {/each}
+            {/if}
           </div>
         </td>
-        <td>{target.exchanges[0]} ⟹ {target.exchanges[1]}</td>
+        <td>
+          <div class="market-wrapper">
+            <div class="market">{path.market}</div>
+            <button
+              class="ob-button"
+              on:click={() => removeObPath({ id: path.id })}
+            >
+              RMV
+            </button>
+          </div>
+        </td>
+        {#if path.exchanges.length}
+          <td>{path.exchanges[0]} ⟹ {path.exchanges[1]}</td>
+        {/if}
       </tr>
     {/each}
   {/if}
@@ -49,13 +70,25 @@
   .market {
     margin-left: 4px;
   }
+
+  .ob-level-profit {
+    display: flex;
+    justify-content: space-between;
+  }
+  .green {
+    color: limegreen;
+  }
+  .red {
+    color: darkred;
+  }
   .ob-button {
     margin: 0px 8px;
     border: 1px solid gray;
     border-radius: 8px;
     cursor: pointer;
     background: transparent;
-    color: rgb(0, 255, 127);
+    color: lightcoral;
+    /* color: rgb(0, 255, 127); */
     font-size: 10px;
     height: 20px;
   }
@@ -65,7 +98,7 @@
   button:disabled {
     border: 1px solid #999999;
     background-color: rgba(119, 136, 153, 0.3);
-    color: rgb(255, 99, 71);
+    /* color: rgb(255, 99, 71); */
     cursor: initial;
   }
   .market-wrapper {

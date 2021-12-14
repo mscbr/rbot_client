@@ -4,7 +4,7 @@
     unsubscribeFromChannel,
     wsStore,
     obStore,
-    clearTargets,
+    clearPaths,
   } from '../stores/websocket';
 
   import WinButton from '../ui/elements/win-button.svelte';
@@ -30,8 +30,8 @@
     </div>
     <div class="btn-wrapper">
       <WinButton
-        onClick={clearTargets}
-        disabled={!$wsStore.wsOpen || !$obStore.targets.length}
+        onClick={clearPaths}
+        disabled={!$wsStore.wsOpen || !$obStore.paths.length}
         ><span>Clear Targets</span></WinButton
       >
     </div>
