@@ -10,7 +10,7 @@
     <th>EXCHANGES</th>
   </tr>
   {#if $tickerStore.arbs && $tickerStore.arbs.length}
-    {#each $tickerStore.arbs as arb (arb.market)}
+    {#each $tickerStore.arbs as arb (`${arb.market}-${arb.ask.exchange}-${arb.bid.exchange}`)}
       <tr>
         <td>{profitToProcent(arb.profit)}</td>
         <td>
@@ -21,7 +21,7 @@
               on:click={() =>
                 addPathToOb({
                   market: arb.market,
-                  exchanges: [arb.lowestAsk.exchange, arb.highestBid.exchange],
+                  exchanges: [arb.ask.exchange, arb.bid.exchange],
                 })}
               disabled={!$wsStore.wsOpen}
             >
@@ -29,7 +29,7 @@
             </button>
           </div>
         </td>
-        <td>{arb.lowestAsk.exchange} ⟹ {arb.highestBid.exchange}</td>
+        <td>{arb.ask.exchange} ⟹ {arb.bid.exchange}</td>
       </tr>
     {/each}
   {/if}

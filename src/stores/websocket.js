@@ -7,12 +7,11 @@ export const wsStore = writable(wsInitState);
 
 let socket = null;
 
-const _compareTargets = (target, { market, lowestAsk, highestBid }) => {
+const _compareTargets = (target, { market, ask, bid }) => {
   if (target.market !== market) return false;
-  return target.exchanges.reduce((acc, exchange) => {
-    if (exchange !== lowestAsk.exchange && exchange !== highestBid.exchange) acc = false;
-    return acc;
-  }, true);
+  if (target.exchanges[0] !== ask.exchange || target.exchanges[1] !== bid.exchange) return false;
+
+  return true;
 };
 
 const _tickerArbsListener = (response) => {
@@ -21,7 +20,7 @@ const _tickerArbsListener = (response) => {
     if (_compareTargets(path, arb)) acc = false;
     return acc;
   }, true));
-
+  
   tickerStore.set({
     arbs,
     interval: response.interval,
@@ -116,7 +115,8 @@ export const addPathToOb = ({ market, exchanges }) => {
       }
     })
   );
-  tickerStore.update((prevState) => ({ ...prevState, arbs: prevState.arbs.filter(arb => arb.market !== market) }));
+
+  tickerStore.update((prevState) => ({ ...prevState, arbs: prevState.arbs.filter(arb => !_compareTargets({market, exchanges}, arb)) }));
 };
 
 export const removeObPath = ({id}) => {
