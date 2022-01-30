@@ -7,6 +7,7 @@
   <tr>
     <th>RL-PROFIT</th>
     <th>PAIR</th>
+    <th>FEES</th>
     <th>EXCHANGES</th>
   </tr>
   {#if $obStore.paths && $obStore.paths.length}
@@ -37,6 +38,19 @@
             </button>
           </div>
         </td>
+        <td
+          >{Object.keys(path.transferFees).length
+            ? `fix: ${path.transferFees.fix} ${
+                path.transferFees.percent
+                  ? `%: ${path.transferFees.percent}`
+                  : ''
+              }` +
+              ' ' +
+              `${Object.keys(path.transferFees.quoteEstimation).map(
+                (key) => `${key}: ${path.transferFees.quoteEstimation[key]}`
+              )}`
+            : 'NO DATA'}</td
+        >
         {#if path.exchanges.length}
           <td>{path.exchanges[0]} ⟹ {path.exchanges[1]}</td>
         {/if}

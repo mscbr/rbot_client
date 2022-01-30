@@ -2,6 +2,7 @@
   import {
     subscribeToChannel,
     unsubscribeFromChannel,
+    populateWithdrawFees,
     wsStore,
     tickerStore,
   } from '../stores/websocket';
@@ -44,6 +45,13 @@
         min={3}
       />
       <div>s.</div>
+    </div>
+  </div>
+  <div class="flex-row">
+    <div class="btn-wrapper">
+      <WinButton onClick={populateWithdrawFees} disabled={!$wsStore.wsOpen}
+        >W/draw fees</WinButton
+      >
     </div>
   </div>
 </div>

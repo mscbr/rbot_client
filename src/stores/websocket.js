@@ -98,6 +98,20 @@ export const unsubscribeFromChannel = (channel) => {
   }
 };
 
+export const populateWithdrawFees = () => {
+  if (!socket && socket.readyState < 1) return;
+  console.log('populateWithdrawFees')
+  socket.send(
+    JSON.stringify({
+      request: 'TRIG',
+      channel: 'tickerArbs',
+      payload: {
+        name: 'populateWithdrawFees',
+      }
+    })
+  );
+}
+
 export const addPathToOb = ({ market, exchanges }) => {
   if (!socket && socket.readyState < 1) return;
   socket.send(

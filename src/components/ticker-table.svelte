@@ -6,6 +6,7 @@
 <table>
   <tr>
     <th>PROFIT</th>
+    <th>TRANSFER FEES</th>
     <th>PAIR</th>
     <th>EXCHANGES</th>
   </tr>
@@ -13,6 +14,17 @@
     {#each $tickerStore.arbs as arb (`${arb.market}-${arb.ask.exchange}-${arb.bid.exchange}`)}
       <tr>
         <td>{profitToProcent(arb.profit)}</td>
+        <td
+          >{Object.keys(arb.transferFees).length
+            ? `fix: ${arb.transferFees.fix} ${
+                arb.transferFees.percent ? `%: ${arb.transferFees.percent}` : ''
+              }` +
+              ' ' +
+              `${Object.keys(arb.transferFees.quoteEstimation).map(
+                (key) => `${key}: ${arb.transferFees.quoteEstimation[key]}`
+              )}`
+            : 'NO DATA'}</td
+        >
         <td>
           <div class="market-wrapper">
             <div class="market">{arb.market}</div>
