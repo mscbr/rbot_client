@@ -39,7 +39,7 @@
           </div>
         </td>
         <td
-          >{Object.keys(path.transferFees).length
+          >{path.transferFees && Object.keys(path.transferFees).length
             ? `fix: ${path.transferFees.fix} ${
                 path.transferFees.percent
                   ? `%: ${path.transferFees.percent}`
