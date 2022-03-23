@@ -1,6 +1,19 @@
 <script>
   import { tickerStore, addPathToOb, wsStore } from '../stores/websocket';
   import { profitToProcent } from '../utils/converters';
+
+  const symbolStatus = (status) => {
+    switch (status) {
+      case 'TO-TEST':
+        return 'color: yellow';
+      case 'CHECKED':
+        return 'color: lime';
+      case 'INVALID':
+        return 'color: red';
+      default:
+        return '';
+    }
+  };
 </script>
 
 <table>
@@ -27,7 +40,12 @@
         >
         <td>
           <div class="market-wrapper">
-            <div class="market">{arb.market}</div>
+            <div
+              class={arb.symbolStatus ? 'green market' : 'market'}
+              style={symbolStatus(arb.symbolStatus)}
+            >
+              {arb.market}
+            </div>
             <button
               class="ob-button"
               on:click={() =>

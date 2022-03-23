@@ -54,6 +54,13 @@
       >
     </div>
   </div>
+  <div class="status-map">
+    <ul>
+      <li><span style="color: lime">BTC/USDT</span> - "CHECKED"</li>
+      <li><span style="color: yellow">BTC/USDT</span> - "TO TEST"</li>
+      <li><span style="color: red">BTC/USDT</span> - "INVALID"</li>
+    </ul>
+  </div>
 </div>
 
 <style>
@@ -62,6 +69,7 @@
     min-height: 250px;
     border: 1px solid cornsilk;
     border-radius: 5px;
+    position: relative;
   }
   .flex-row {
     display: flex;
@@ -84,5 +92,10 @@
     display: flex;
     align-items: baseline;
     gap: 4px;
+  }
+  .status-map {
+    position: absolute;
+    bottom: 0;
+    font-size: 12px;
   }
 </style>
