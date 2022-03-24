@@ -16,11 +16,21 @@ const _compareTargets = (target, { market, ask, bid }) => {
 
 const _tickerArbsListener = (response) => {
   const { paths } = get(obStore);
-  const arbs = response.arbs.filter(arb => paths.reduce((acc, path) => {
-    if (_compareTargets(path, arb)) acc = false;
-    return acc;
-  }, true));
-  
+  const arbs = response.arbs.map(arb => {
+    if (paths.reduce((acc, path) => {
+      if (_compareTargets(path, arb)) acc = true;
+      return acc;
+    }, false)) return {
+      ...arb,
+      inOb: true
+    };
+
+    return {
+      ...arb,
+      inOb: false
+    };
+  });
+
   tickerStore.set({
     arbs,
     interval: response.interval,
@@ -100,7 +110,6 @@ export const unsubscribeFromChannel = (channel) => {
 
 export const populateWithdrawFees = () => {
   if (!socket && socket.readyState < 1) return;
-  console.log('populateWithdrawFees')
   socket.send(
     JSON.stringify({
       request: 'TRIG',
@@ -110,10 +119,13 @@ export const populateWithdrawFees = () => {
       }
     })
   );
-}
+};
 
 export const addPathToOb = ({ market, exchanges }) => {
   if (!socket && socket.readyState < 1) return;
+
+  const { paths } = get(obStore);
+
   socket.send(
     JSON.stringify({
       request: 'TRIG',
@@ -130,10 +142,27 @@ export const addPathToOb = ({ market, exchanges }) => {
     })
   );
 
-  tickerStore.update((prevState) => ({ ...prevState, arbs: prevState.arbs.filter(arb => !_compareTargets({market, exchanges}, arb)) }));
+  tickerStore.update((prevState) => ({
+    ...prevState, arbs: prevState.arbs.map(arb => {
+      if (paths.reduce((acc, path) => {
+        if (_compareTargets(path, arb)) acc = true;
+        return acc;
+      }, false) || _compareTargets({ market, exchanges }, arb)) {
+        return {
+          ...arb,
+          inOb: true
+        };
+      }
+
+      return {
+        ...arb,
+        inOb: false
+      };
+    })
+  }));
 };
 
-export const removeObPath = ({id}) => {
+export const removeObPath = ({ id }) => {
   socket.send(
     JSON.stringify({
       request: 'TRIG',
@@ -149,7 +178,7 @@ export const removeObPath = ({id}) => {
     })
   );
   obStore.update((prevState) => ({ ...prevState, arbs: prevState.paths.filter(path => path.id !== id) }));
-}
+};
 
 export const clearPaths = () => {
   if (!socket && socket.readyState < 1) return;

@@ -46,17 +46,19 @@
             >
               {arb.market}
             </div>
-            <button
-              class="ob-button"
-              on:click={() =>
-                addPathToOb({
-                  market: arb.market,
-                  exchanges: [arb.ask.exchange, arb.bid.exchange],
-                })}
-              disabled={!$wsStore.wsOpen}
-            >
-              OB->
-            </button>
+            {#if !arb.inOb}
+              <button
+                class="ob-button"
+                on:click={() =>
+                  addPathToOb({
+                    market: arb.market,
+                    exchanges: [arb.ask.exchange, arb.bid.exchange],
+                  })}
+                disabled={!$wsStore.wsOpen}
+              >
+                OB->
+              </button>
+            {/if}
           </div>
         </td>
         <td>{arb.ask.exchange} ⟹ {arb.bid.exchange}</td>
